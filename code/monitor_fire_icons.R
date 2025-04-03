@@ -87,13 +87,20 @@ plot(1, type = "n", xlim = c(0, width), ylim = c(0, height), axes = FALSE, xlab 
 symbols(width / 2, height / 2, circles = width / 6, inches = FALSE, bg = "#FE9929", fg = NA, add = TRUE)
 dev.off()
 
-inner_circle <- image_read("inner_circle.png") %>% image_blur(5, 2)
+inner_circle <- image_read("inner_circle.png") %>% image_blur(3, 1)
 
 # Composite the two circles
 final_image <- image_composite(outer_circle, inner_circle, operator = "over")
 
+# trim image
+final_image <- image_trim(final_image)
+
+# resize image
+final_image <- image_resize(final_image, "900x900")
+
 # Save and display the final image
-image_write(final_image, "blurred_circles.png")
+image_write(final_image, 
+            "sattelite_detect.png")
 final_image
 
 
