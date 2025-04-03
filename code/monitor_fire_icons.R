@@ -61,3 +61,56 @@ image_write(trimmed_img, "redFlame.png")
 
 
 
+# create satellite detect image
+fire_detect_png <- image_read("sattelite_detect.png")
+
+# Define image size
+width <- 900
+height <- 900
+
+# Create an empty image
+canvas <- image_blank(width, height, color = "transparent")
+
+# Save outer circle with blur
+png("outer_circle.png", width = width, height = height, bg = "transparent")
+par(mar = rep(0, 4)) # Remove margins
+plot(1, type = "n", xlim = c(0, width), ylim = c(0, height), axes = FALSE, xlab = "", ylab = "")
+symbols(width / 2, height / 2, circles = width / 3, inches = FALSE, bg = "#EFCD78", fg = NA, add = TRUE)
+dev.off()
+
+outer_circle <- image_read("outer_circle.png") %>% image_blur(40, 20)
+
+# Save inner circle with slight blur
+png("inner_circle.png", width = width, height = height, bg = "transparent")
+par(mar = rep(0, 4))
+plot(1, type = "n", xlim = c(0, width), ylim = c(0, height), axes = FALSE, xlab = "", ylab = "")
+symbols(width / 2, height / 2, circles = width / 6, inches = FALSE, bg = "#FE9929", fg = NA, add = TRUE)
+dev.off()
+
+inner_circle <- image_read("inner_circle.png") %>% image_blur(5, 2)
+
+# Composite the two circles
+final_image <- image_composite(outer_circle, inner_circle, operator = "over")
+
+# Save and display the final image
+image_write(final_image, "blurred_circles.png")
+final_image
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
