@@ -11,7 +11,7 @@ dev.off()
 png("temp_mon.png", width = 900, height = 900, res = 10500, bg = "transparent")
 par(mar = c(0, 0, 0, 0))
 plot.new()
-points(.5, .5, pch = 21, cex = 0.5, lwd = 0.5,  col = "black", bg = "#00E400")
+points(.5, .5, pch = 21, cex = 0.65, lwd = 0.5,  col = "black", bg = "#00E400")
 dev.off()
 
 
@@ -51,14 +51,28 @@ red_flame <- sapply(names, function(name) {
 })
 
 # trim whitespace
-fire_png <- image_read("redFlame.png")
+fire_png <- image_read("redFlame_raw.png")
 
-# Trim whitespace
-trimmed_img <- image_trim(fire_png)
+img <- image_trim(fire_png, fuzz = 10)
 
-# Save the trimmed image
-image_write(trimmed_img, "redFlame.png")
+img <- image_flatten(fire_png)
 
+# Flood-fill from top-left
+img1 <- image_fill(img, color = "none", point = "+0+0", fuzz = 10)
+
+# Flood-fill from top-right
+width <- image_info(img)$width
+img2 <- image_fill(img1, color = "none", point = paste0("+", width - 1, "+0"), fuzz = 10)
+
+# Flood-fill from bottom-left
+height <- image_info(img)$height
+img3 <- image_fill(img2, color = "none", point = paste0("+0+", height - 1), fuzz = 10)
+
+# Flood-fill from bottom-right (optional but often useful)
+img_final <- image_fill(img3, color = "none", point = paste0("+", width - 1, "+", height - 1), fuzz = 10)
+
+# Save result
+image_write(img_final, "redFlame.png")
 
 
 # create satellite detect image
