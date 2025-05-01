@@ -55,7 +55,7 @@ fire_png <- image_read("redFlame_raw.png")
 
 img <- image_trim(fire_png, fuzz = 10)
 
-img <- image_flatten(fire_png)
+img <- image_flatten(img)
 
 # Flood-fill from top-left
 img1 <- image_fill(img, color = "none", point = "+0+0", fuzz = 10)
